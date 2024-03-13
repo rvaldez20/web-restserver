@@ -27,6 +27,8 @@ export class Server {
   async start() {
 
     //* middlewares
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
 
 
     //* Routes
@@ -35,6 +37,8 @@ export class Server {
 
     //* public folder
     this.app.use(express.static(this.publicPath));
+
+
 
 
     //* SPA
