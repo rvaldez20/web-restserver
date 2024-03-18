@@ -33,12 +33,9 @@ export class TodosController {
   }
 
   public createTodo = async(req: Request, res: Response) => {
-    // const { text } = req.body   // ahora se usara el Dto
 
     const [error, createTodoDto] = CreateTodoDto.create(req.body);
     if(error) return res.status(400).json({ error });
-
-    // if( !text ) return res.status(400).json({err: 'Text property is required'}); // ahora se usara el Dto
 
     const newTodo = await prisma.todo.create({
       data: createTodoDto!
@@ -50,16 +47,12 @@ export class TodosController {
 
   public updateTodo = async(req:Request, res: Response) => {
     const id = +req.params.id;
-    // if(isNaN(id)) return res.status(400).json({ err: 'ID argument need to be a number'}) //ahora se usara el Dto
     const [error, updateTodoDto] = UpdateTodoDto.create({ ...req.body, id })
 
     if (error) return res.status(400).json({error});
 
     const todo = await prisma.todo.findUnique({ where: { id: id }});
     if( !todo ) return res.status(404).json({err: `TODO with id ${id} not found`});
-
-
-    // const { text, completedAt } = req.body;
 
     const todoUpdate = await prisma.todo.update({
       where: { id },
