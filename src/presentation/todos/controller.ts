@@ -22,9 +22,7 @@ export class TodosController {
     if(isNaN(id)) return res.status(400).json({ err: 'ID argument need to be a number'})
 
     const todo = await prisma.todo.findFirst({
-      where: {
-        id: id
-      }
+      where: { id: id }
     });
 
     if(!todo) return res.status(404).json({ err: `TODO with ID: ${id} not found`})

@@ -18,8 +18,13 @@ export class TodoDatasourceImp implements TodoDatasource {
 
 
 
-  findById(id: number): Promise<TodoEntity> {
-    throw new Error("Method not implemented.");
+  async findById(id: number): Promise<TodoEntity> {
+    const todo = await prisma.todo.findFirst({
+      where: { id: id }
+    });
+
+    if( !todo ) throw `Todo with ID ${id} not found`;
+    return TodoEntity.fromObj(todo);
   }
 
 
