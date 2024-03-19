@@ -4,6 +4,7 @@ import { CreateTodoDto, TodoDatasource, TodoEntity, UpdateTodoDto } from "../../
 
 
 export class TodoDatasourceImp implements TodoDatasource {
+
   create(createTodoDto: CreateTodoDto): Promise<TodoEntity> {
     throw new Error("Method not implemented.");
   }
@@ -24,13 +25,22 @@ export class TodoDatasourceImp implements TodoDatasource {
     });
 
     if( !todo ) throw `Todo with ID ${id} not found`;
+
     return TodoEntity.fromObj(todo);
   }
 
 
 
-  updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
-    throw new Error("Method not implemented.");
+  async updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
+    await this.findById( updateTodoDto.id );
+
+    // usamos el mismo method findById() para buscar el todo
+    const todoUpdate = await prisma.todo.update({
+      where: { id: updateTodoDto.id },
+      data: updateTodoDto!.values,
+    });
+
+    return TodoEntity.fromObj(todoUpdate);
   }
 
 
